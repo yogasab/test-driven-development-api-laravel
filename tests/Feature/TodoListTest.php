@@ -14,10 +14,11 @@ class TodoListTest extends TestCase
     public function test_get_todo_lists_index()
     {
         // Preparation
-        TodoList::create(['name' => 'Coding backend']);
+        factory(TodoList::class)->create(['name' => 'Coding Backend in Laravel']);
         // Action / perform
         $response = $this->getJson(route('todo-lists.index'));
         // Assertion / predict
         $this->assertEquals(1, count($response->json()));
+        $this->assertEquals('Coding Backend in Laravel', $response->json()['lists'][0]['name']);
     }
 }
