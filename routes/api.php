@@ -22,3 +22,5 @@ Route::get('todo-lists/{list}', 'API\TodoListController@show')->name('todo-lists
 Route::post('todo-lists', 'API\TodoListController@store')->name('todo-lists.store');
 Route::delete('todo-lists/{list}', 'API\TodoListController@destroy')->name('todo-lists.destroy');
 Route::patch('todo-lists/{list}', 'API\TodoListController@update')->name('todo-lists.update');
+
+Route::get('tasks', 'API\TaskController@index')->name('tasks.index');
