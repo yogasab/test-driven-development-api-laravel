@@ -26,4 +26,17 @@ class TodoListController extends Controller
         $list = TodoList::create($request->all());
         return response($list, Response::HTTP_CREATED);
     }
+
+    public function destroy(TodoList $list)
+    {
+        $list->delete();
+        return response('', 204);
+    }
+
+    public function update(TodoList $list, Request $request)
+    {
+        $request->validate(['name' => 'required']);
+        $list->update($request->all());
+        return $list;
+    }
 }

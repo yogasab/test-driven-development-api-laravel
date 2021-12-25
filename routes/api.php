@@ -20,3 +20,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('todo-lists', 'API\TodoListController@index')->name('todo-lists.index');
 Route::get('todo-lists/{list}', 'API\TodoListController@show')->name('todo-lists.show');
 Route::post('todo-lists', 'API\TodoListController@store')->name('todo-lists.store');
+Route::delete('todo-lists/{list}', 'API\TodoListController@destroy')->name('todo-lists.destroy');
+Route::patch('todo-lists/{list}', 'API\TodoListController@update')->name('todo-lists.update');
