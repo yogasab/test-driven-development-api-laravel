@@ -2,20 +2,19 @@
 
 namespace Tests\Feature;
 
+use App\TodoList;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class TodoListTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
+    use RefreshDatabase;
+
     public function test_get_todo_lists_index()
     {
         // Preparation
+        TodoList::create(['name' => 'Coding backend']);
         // Action / perform
         $response = $this->getJson(route('todo-lists.index'));
         // Assertion / predict
