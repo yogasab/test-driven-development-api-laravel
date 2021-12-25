@@ -18,3 +18,4 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 Route::get('todo-lists', 'API\TodoListController@index')->name('todo-lists.index');
+Route::get('todo-lists/{id}', 'API\TodoListController@show')->name('todo-lists.show');

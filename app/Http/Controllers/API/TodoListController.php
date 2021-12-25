@@ -13,4 +13,10 @@ class TodoListController extends Controller
         $lists = TodoList::all();
         return response(['lists' => $lists]);
     }
+
+    public function show($id)
+    {
+        $list = TodoList::find($id);
+        return response($list);
+    }
 }
