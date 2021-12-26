@@ -7,7 +7,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Task extends Model
 {
-    protected $fillable = ['title', 'todo_list_id'];
+    public const NOT_STARTED = 'not_started';
+    public const PENDING = 'pending';
+    public const STARTED = 'started';
+
+    protected $fillable = ['title', 'todo_list_id', 'status'];
 
     public function todo_list(): BelongsTo
     {
