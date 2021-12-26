@@ -15,7 +15,7 @@ class TodoListTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->list = factory(TodoList::class)->create(['name' => 'Coding Backend in Laravel']);
+        $this->list = $this->createTodoListFactory(['name' => 'Coding Backend in Laravel']);
     }
 
     public function test_get_all_todo_lists_index()

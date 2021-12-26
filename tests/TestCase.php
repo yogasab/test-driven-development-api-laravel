@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use App\TodoList;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
@@ -12,5 +13,10 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
         $this->withoutExceptionHandling();
+    }
+
+    public function createTodoListFactory($args = [])
+    {
+        return factory(TodoList::class)->create($args);
     }
 }

@@ -14,13 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-Route::get('todo-lists', 'API\TodoListController@index')->name('todo-lists.index');
-Route::get('todo-lists/{list}', 'API\TodoListController@show')->name('todo-lists.show');
-Route::post('todo-lists', 'API\TodoListController@store')->name('todo-lists.store');
-Route::delete('todo-lists/{list}', 'API\TodoListController@destroy')->name('todo-lists.destroy');
-Route::patch('todo-lists/{list}', 'API\TodoListController@update')->name('todo-lists.update');
+Route::apiResource('todo-lists', 'API\TodoListController');
 
 Route::get('tasks', 'API\TaskController@index')->name('tasks.index');
