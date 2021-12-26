@@ -15,5 +15,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::apiResource('todo-lists', 'API\TodoListController');
-
-Route::get('tasks', 'API\TaskController@index')->name('tasks.index');
+Route::apiResource('tasks', 'API\TaskController');
