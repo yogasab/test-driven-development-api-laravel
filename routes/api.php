@@ -15,4 +15,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::apiResource('todo-lists', 'API\TodoListController');
-Route::apiResource('tasks', 'API\TaskController');
+Route::apiResource('todo-list.tasks', 'API\TaskController')->shallow();
