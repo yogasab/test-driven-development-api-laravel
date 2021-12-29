@@ -10,6 +10,12 @@ use Tests\TestCase;
 class TaskTest extends TestCase
 {
     use RefreshDatabase;
+    
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->generateToken();
+    }
 
     public function test_fetch_all_tasks_of_todo_list()
     {
@@ -17,7 +23,7 @@ class TaskTest extends TestCase
         $task = $this->createTaskFactory(['todo_list_id' => $list->id]);
 
         $response = $this->getJson(route('todo-list.tasks.index', $list->id))->assertOk()->json();
-        
+
         $this->assertEquals(1, count($response));
         $this->assertEquals($task->title, $response[0]['title']);
         $this->assertEquals($response[0]['todo_list_id'], $list->id);

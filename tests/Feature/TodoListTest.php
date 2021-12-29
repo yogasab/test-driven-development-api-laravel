@@ -12,9 +12,11 @@ class TodoListTest extends TestCase
     use RefreshDatabase;
 
     public $list;
+    
     public function setUp(): void
     {
         parent::setUp();
+        $this->generateToken();
         $this->list = $this->createTodoListFactory(['name' => 'Coding Backend in Laravel']);
     }
 

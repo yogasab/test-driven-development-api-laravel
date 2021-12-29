@@ -14,5 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::apiResource('todo-lists', 'API\TodoListController');
-Route::apiResource('todo-list.tasks', 'API\TaskController')->shallow();
+Route::middleware('auth:sanctum')->group(function () {
+  Route::apiResource('todo-lists', 'API\TodoListController');
+  Route::apiResource('todo-list.tasks', 'API\TaskController')->shallow();
+});
+
+Route::post('/register', 'API\Auth\RegisterController')->name('register.user');
+Route::post('/login', 'API\Auth\LoginController')->name('login.user');
