@@ -17,6 +17,7 @@ class CreateLabelsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('color');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
