@@ -12,19 +12,23 @@ class TodoListTest extends TestCase
     use RefreshDatabase;
 
     public $list;
-    
+
     public function setUp(): void
     {
         parent::setUp();
-        $this->generateToken();
-        $this->list = $this->createTodoListFactory(['name' => 'Coding Backend in Laravel']);
+        $user = $this->generateToken();
+        $this->list = $this->createTodoListFactory([
+            'name' => 'Coding Backend in Laravel',
+            'user_id' => $user->id
+        ]);
     }
 
     public function test_get_all_todo_lists_index()
     {
         // Preparation
-        // factory(TodoList::class)->create(['name' => 'Coding Backend in Laravel']);
+        factory(TodoList::class)->create();
         // Action / perform
+        $this->createTodoListFactory();
         $response = $this->getJson(route('todo-lists.index'));
 
         // Assertion / predict
@@ -43,9 +47,13 @@ class TodoListTest extends TestCase
 
     public function test_store_new_todo_list()
     {
+        // $user = $this->generateToken();
         $list = factory(TodoList::class)->make();
 
-        $response = $this->postJson(route('todo-lists.store', ['name' => $list->name]))
+        $response = $this->postJson(route('todo-lists.store', [
+            'name' => $list->name,
+            // 'user_id' => $user->id
+        ]))
             ->assertCreated()
             ->json();
         $this->assertEquals($list->name, $response['name']);

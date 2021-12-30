@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TodoList extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'user_id'];
+    // protected $guarded = [];
 
     public static function boot()
     {
