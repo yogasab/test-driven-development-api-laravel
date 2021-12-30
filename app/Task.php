@@ -11,7 +11,7 @@ class Task extends Model
     public const PENDING = 'pending';
     public const STARTED = 'started';
 
-    protected $fillable = ['title', 'todo_list_id', 'status'];
+    protected $fillable = ['title', 'todo_list_id', 'status', 'label_id'];
 
     public function todo_list(): BelongsTo
     {

@@ -10,7 +10,7 @@ use Tests\TestCase;
 class TaskTest extends TestCase
 {
     use RefreshDatabase;
-    
+
     public function setUp(): void
     {
         parent::setUp();
@@ -33,14 +33,35 @@ class TaskTest extends TestCase
     {
         $task = factory(Task::class)->make();
         $list = $this->createTodoListFactory();
+        $label = $this->createLabelFactory();
 
-        $response = $this->postJson(route('todo-list.tasks.store', $list->id), ['title' => $task->title])->assertCreated()->json();
+        $response = $this->postJson(route('todo-list.tasks.store', $list->id), [
+            'title' => $task->title,
+            'label_id' => $label->id
+        ])->assertCreated()->json();
 
         $this->assertDatabaseHas('tasks', [
             'title' => $task->title,
-            'todo_list_id' => $list->id
+            'todo_list_id' => $list->id,
+            'label_id' => $label->id
         ]);
         // $this->assertEquals($task->title, $response['title']);
+    }
+
+    public function test_store_new_task_of_todo_list_without_label_id()
+    {
+        $task = factory(Task::class)->make();
+        $list = $this->createTodoListFactory();
+        $label = $this->createLabelFactory();
+
+        $response = $this->postJson(route('todo-list.tasks.store', $list->id), [
+            'title' => $task->title,
+        ])->assertCreated()->json();
+
+        $this->assertDatabaseHas('tasks', [
+            'title' => $task->title,
+            'todo_list_id' => $list->id,
+        ]);
     }
 
     public function test_delete_task_of_todo_list()
