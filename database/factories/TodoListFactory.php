@@ -11,6 +11,7 @@ $factory->define(TodoList::class, function (Faker $faker) {
         'name' => $faker->sentence,
         'user_id' => function () {
             return factory(User::class)->create()->id;
-        }
+        },
+        'description' => $faker->sentence(10)
     ];
 });
