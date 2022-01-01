@@ -22,6 +22,7 @@ class CreateTasksTable extends Migration
             $table->unsignedBigInteger('todo_list_id')->nullable();
             $table->unsignedBigInteger('label_id')->nullable();
             // $table->foreignId('label_id')->nullable()->constrained('labels');
+            // $table->foreignId('todo_list_id')->nullable()->constrained('todo_lists');
             $table->timestamps();
         });
     }
