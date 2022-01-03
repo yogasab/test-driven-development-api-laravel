@@ -20,6 +20,7 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::apiResource('todo-list.tasks', 'API\TaskController')->shallow();
   Route::get('/service/connect/{service}', 'API\ServiceController@connect')->name('service.connect');
   Route::post('/service/callback/{code}', 'API\ServiceController@callback')->name('service.callback');
+  Route::post('/service/{service}/upload', 'API\ServiceController@upload')->name('service.upload');
 });
 
 Route::post('/register', 'API\Auth\RegisterController')->name('register.user');

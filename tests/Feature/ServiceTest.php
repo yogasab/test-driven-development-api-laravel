@@ -27,9 +27,6 @@ class ServiceTest extends TestCase
     public function test_user_can_connect_to_services_and_token_is_stored()
     {
         $this->mock(Client::class, function (MockInterface $mock) {
-            // $mock->shouldReceive('setClientId')->once();
-            // $mock->shouldReceive('setClientSecret')->once();
-            // $mock->shouldReceive('setRedirectUri')->once();
             $mock->shouldReceive('setScopes')->once();
             $mock->shouldReceive('createAuthUrl')->andReturn('http://127.0.0.1:8000/connect');
             $mock->shouldReceive('fetchAccessTokenWithAuthCode')->andReturn('fake-token');
@@ -46,9 +43,6 @@ class ServiceTest extends TestCase
     public function test_service_callback_will_store_token()
     {
         $this->mock(Client::class, function (MockInterface $mock) {
-            // $mock->shouldReceive('setClientId')->once();
-            // $mock->shouldReceive('setClientSecret')->once();
-            // $mock->shouldReceive('setRedirectUri')->once();
             $mock->shouldReceive('setScopes')->once();
             $mock->shouldReceive('fetchAccessTokenWithAuthCode')->andReturn('fake-token');
         });
@@ -57,8 +51,21 @@ class ServiceTest extends TestCase
 
         $this->assertDatabaseHas('services', [
             'user_id' => $this->user->id,
-            'token' => $service['token'],
+            'token' => "\"{\\\"access_token\\\":\\\"fake-token\\\"}\"",
             'name' => $service['name']
         ]);
+    }
+
+    public function test_user_can_upload_files_to_google_drive()
+    {
+        $this->mock(Client::class, function (MockInterface $mock) {
+            $mock->shouldReceive('setAccessToken')->once();
+            $mock->shouldReceive('getLogger->info')->once();
+            $mock->shouldReceive('shouldDefer')->once();
+            $mock->shouldReceive('execute')->once();
+        });
+        $service = $this->createServiceFactory();
+
+        $this->postJson(route('service.upload', $service->id))->assertCreated();
     }
 }

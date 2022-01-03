@@ -3,6 +3,7 @@
 namespace Tests;
 
 use App\Label;
+use App\Service;
 use App\Task;
 use App\TodoList;
 use App\User;
@@ -44,5 +45,10 @@ abstract class TestCase extends BaseTestCase
     public function createLabelFactory($args = [])
     {
         return factory(Label::class)->create($args);
+    }
+
+    public function createServiceFactory($args = [])
+    {
+        return factory(Service::class)->create($args);
     }
 }

@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
-use Google\Client;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Service;
+use Google\Client;
+use Google\Service\Drive;
+use Illuminate\Http\Request;
+use Google\Service\Drive\DriveFile;
+use App\Http\Controllers\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 class ServiceController extends Controller
 {
@@ -51,5 +54,34 @@ class ServiceController extends Controller
         ]);
 
         return $service;
+    }
+
+    public function upload(Request $request, Service $service, Client $client)
+    {
+        $accessToken = $service->token['access_token'];
+        $client->setAccessToken($accessToken);
+
+        $service = new Drive($client);
+        // We'll setup an empty 1MB file to upload.
+        DEFINE("TESTFILE", 'testfile-small.txt');
+        if (!file_exists(TESTFILE)) {
+            $fh = fopen(TESTFILE, 'w');
+            fseek($fh, 1024 * 1024);
+            fwrite($fh, "!", 1);
+            fclose($fh);
+        }
+        // Now lets try and send the metadata as well using multipart!
+        $file = new DriveFile;
+        $file->setName("Upload test file from Development");
+        $service->files->create(
+            $file,
+            array(
+                'data' => file_get_contents(TESTFILE),
+                'mimeType' => 'application/octet-stream',
+                'uploadType' => 'multipart'
+            )
+        );
+
+        return response('', Response::HTTP_CREATED);
     }
 }
