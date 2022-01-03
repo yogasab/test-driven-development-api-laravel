@@ -14,15 +14,14 @@ class ServiceController extends Controller
         'https://www.googleapis.com/auth/drive.file'
     ];
 
-    public function connect(Request $request)
+    public function connect(Request $request, Client $client)
     {
         if ($request->service === 'google-drive') {
-            $client = new Client();
-
-            $config = config('services.google-drive');
-            $client->setClientId($config['id']);
-            $client->setClientSecret($config['secret']);
-            $client->setRedirectUri($config['redirect_uri']);
+            // $client = new Client();
+            // $config = config('services.google-drive');
+            // $client->setClientId($config['id']);
+            // $client->setClientSecret($config['secret']);
+            // $client->setRedirectUri($config['redirect_uri']);
             $client->setScopes(self::DRIVE_SCOPES);
             $url = $client->createAuthUrl();
 
@@ -30,18 +29,18 @@ class ServiceController extends Controller
         }
     }
 
-    public function callback(Request $request)
+    public function callback(Request $request, Client $client)
     {
         // Regular
         // $client = new Client();
         // Mocking
-        $client = app(Client::class);
-        $code = $request->code;
+        // $client = app(Client::class);
 
-        $config = config('services.google-drive');
-        $client->setClientId($config['id']);
-        $client->setClientSecret($config['secret']);
-        $client->setRedirectUri($config['redirect_uri']);
+        // $config = config('services.google-drive');
+        // $client->setClientId($config['id']);
+        // $client->setClientSecret($config['secret']);
+        // $client->setRedirectUri($config['redirect_uri']);
+        $code = $request->code;
         $client->setScopes(self::DRIVE_SCOPES);
         $accessToken = $client->fetchAccessTokenWithAuthCode($code);
 

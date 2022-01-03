@@ -26,19 +26,29 @@ class ServiceTest extends TestCase
 
     public function test_user_can_connect_to_services_and_token_is_stored()
     {
+        $this->mock(Client::class, function (MockInterface $mock) {
+            // $mock->shouldReceive('setClientId')->once();
+            // $mock->shouldReceive('setClientSecret')->once();
+            // $mock->shouldReceive('setRedirectUri')->once();
+            $mock->shouldReceive('setScopes')->once();
+            $mock->shouldReceive('createAuthUrl')->andReturn('http://127.0.0.1:8000/connect');
+            $mock->shouldReceive('fetchAccessTokenWithAuthCode')->andReturn('fake-token');
+        });
+
         $response = $this->getJson(route('service.connect', 'google-drive'))
             ->assertOk()
             ->json();
 
+        $this->assertEquals($response['url'], 'http://127.0.0.1:8000/connect');
         $this->assertNotNull($response['url']);
     }
 
     public function test_service_callback_will_store_token()
     {
         $this->mock(Client::class, function (MockInterface $mock) {
-            $mock->shouldReceive('setClientId')->once();
-            $mock->shouldReceive('setClientSecret')->once();
-            $mock->shouldReceive('setRedirectUri')->once();
+            // $mock->shouldReceive('setClientId')->once();
+            // $mock->shouldReceive('setClientSecret')->once();
+            // $mock->shouldReceive('setRedirectUri')->once();
             $mock->shouldReceive('setScopes')->once();
             $mock->shouldReceive('fetchAccessTokenWithAuthCode')->andReturn('fake-token');
         });
