@@ -17,8 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->group(function () {
   Route::apiResource('todo-lists', 'API\TodoListController');
   Route::apiResource('labels', 'API\LabelController');
-  Route::get('/service/connect/{service}', 'API\ServiceController@connect')->name('service.connect');
   Route::apiResource('todo-list.tasks', 'API\TaskController')->shallow();
+  Route::get('/service/connect/{service}', 'API\ServiceController@connect')->name('service.connect');
+  Route::post('/service/callback/{code}', 'API\ServiceController@callback')->name('service.callback');
 });
 
 Route::post('/register', 'API\Auth\RegisterController')->name('register.user');

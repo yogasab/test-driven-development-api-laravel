@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Google\Client;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Service;
 
 class ServiceController extends Controller
 {
@@ -27,5 +28,26 @@ class ServiceController extends Controller
 
             return response(['url' => $url]);
         }
+    }
+
+    public function callback(Request $request)
+    {
+        $client = new Client();
+        $code = $request->code;
+
+        $config = config('services.google-drive');
+        $client->setClientId($config['id']);
+        $client->setClientSecret($config['secret']);
+        $client->setRedirectUri($config['redirect_uri']);
+        $client->setScopes(self::DRIVE_SCOPES);
+        $accessToken = $client->fetchAccessTokenWithAuthCode($code);
+
+        $service = Service::create([
+            'user_id' => auth()->id(),
+            'token' => json_encode(['access_token' => $accessToken]),
+            'name' => 'google-drive'
+        ]);
+
+        return $service;
     }
 }
