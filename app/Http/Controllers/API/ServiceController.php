@@ -32,7 +32,10 @@ class ServiceController extends Controller
 
     public function callback(Request $request)
     {
-        $client = new Client();
+        // Regular
+        // $client = new Client();
+        // Mocking
+        $client = app(Client::class);
         $code = $request->code;
 
         $config = config('services.google-drive');
