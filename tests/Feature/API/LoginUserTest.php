@@ -14,6 +14,7 @@ class LoginUserTest extends TestCase
     public function test_user_can_login_using_email_and_password()
     {
         $user = factory(User::class)->create();
+
         $response = $this->postJson(route('login.user'), [
             'email' => $user->email,
             'password' => 'password'

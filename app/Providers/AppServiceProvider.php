@@ -15,7 +15,10 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(Client::class, function () {
-            $client = app(Client::class);
+            // For Feature Test
+            // $client = app(Client::class);
+            // For real controller
+            $client = new Client();
 
             $config = config('services.google-drive');
             $client->setClientId($config['id']);
