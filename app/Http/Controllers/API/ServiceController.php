@@ -8,7 +8,10 @@ use Google\Service\Drive;
 use Illuminate\Http\Request;
 use Google\Service\Drive\DriveFile;
 use App\Http\Controllers\Controller;
+use App\Task;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
+use ZipArchive;
 
 class ServiceController extends Controller
 {
@@ -58,25 +61,32 @@ class ServiceController extends Controller
 
     public function upload(Request $request, Service $service, Client $client)
     {
+        // Fetch last 7 days of tasks
+        $tasks = Task::where('created_at', '>=', now()->subDays(7))->get();
+        // Create json file with the data
+        $fileName = '7DaysTasks.json';
+        Storage::put("/public/tasks/$fileName", $tasks->toJson());
+        // Create zip file from data
+        $zip = new ZipArchive();
+        $zipFileName = storage_path('app/public/tasks/' . now()->timestamp . '-task.zip');
+        if ($zip->open($zipFileName, ZipArchive::CREATE) === true) {
+            $zipFilePath = storage_path('app/public/tasks/' . $fileName);
+            $zip->addFile($zipFilePath);
+        }
+        $zip->close();
+
+        // Send to Drive
         $accessToken = $service->token['access_token'];
         $client->setAccessToken($accessToken);
-
         $service = new Drive($client);
         // We'll setup an empty 1MB file to upload.
-        DEFINE("TESTFILE", 'testfile-small.txt');
-        if (!file_exists(TESTFILE)) {
-            $fh = fopen(TESTFILE, 'w');
-            fseek($fh, 1024 * 1024);
-            fwrite($fh, "!", 1);
-            fclose($fh);
-        }
         // Now lets try and send the metadata as well using multipart!
         $file = new DriveFile;
         $file->setName("Upload test file from Development");
         $service->files->create(
             $file,
             array(
-                'data' => file_get_contents(TESTFILE),
+                'data' => file_get_contents($zipFileName),
                 'mimeType' => 'application/octet-stream',
                 'uploadType' => 'multipart'
             )

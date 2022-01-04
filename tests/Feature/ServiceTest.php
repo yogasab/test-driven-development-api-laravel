@@ -58,13 +58,20 @@ class ServiceTest extends TestCase
 
     public function test_user_can_upload_files_to_google_drive()
     {
+        $this->createTaskFactory(['created_at' => now()->subDays(2)]);
+        $this->createTaskFactory(['created_at' => now()->subDays(3)]);
+        $this->createTaskFactory(['created_at' => now()->subDays(4)]);
+
+        $this->createTaskFactory(['created_at' => now()->subDays(10)]);
+
+        $service = $this->createServiceFactory();
+
         $this->mock(Client::class, function (MockInterface $mock) {
             $mock->shouldReceive('setAccessToken')->once();
             $mock->shouldReceive('getLogger->info')->once();
             $mock->shouldReceive('shouldDefer')->once();
             $mock->shouldReceive('execute')->once();
         });
-        $service = $this->createServiceFactory();
 
         $this->postJson(route('service.upload', $service->id))->assertCreated();
     }
