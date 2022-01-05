@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Google\Service\Drive\DriveFile;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TaskResource;
+use App\Services\GoogleDrive;
+use App\Services\Zip;
 use App\Task;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
@@ -59,38 +61,15 @@ class ServiceController extends Controller
         return $service;
     }
 
-    public function upload(Request $request, Service $service, Client $client)
+    public function upload(Request $request, Service $service, GoogleDrive $googleDrive)
     {
         // Fetch last 7 days of tasks
         $tasks = Task::where('created_at', '>=', now()->subDays(7))->get();
-        // Create json file with the data
-        $fileName = '7DaysTasks.json';
-        Storage::put("/public/tasks/$fileName", TaskResource::collection($tasks));
-        // Create zip file from data
-        $zip = new ZipArchive();
-        $zipFileName = storage_path('app/public/tasks/' . now()->timestamp . '-task.zip');
-        if ($zip->open($zipFileName, ZipArchive::CREATE) === true) {
-            $zipFilePath = storage_path('app/public/tasks/' . $fileName);
-            $zip->addFile($zipFilePath, $fileName);
-        }
-        $zip->close();
+        $zipFileName = Zip::createZipOf($tasks);
 
         // Send to Drive
         $accessToken = $service->token['access_token'];
-        $client->setAccessToken($accessToken);
-        $service = new Drive($client);
-        // We'll setup an empty 1MB file to upload.
-        // Now lets try and send the metadata as well using multipart!
-        $file = new DriveFile;
-        $file->setName("HelloWorld.zip");
-        $service->files->create(
-            $file,
-            array(
-                'data' => file_get_contents($zipFileName),
-                'mimeType' => 'application/octet-stream',
-                'uploadType' => 'multipart'
-            )
-        );
+        $googleDrive->uploadFile($zipFileName, $accessToken);
 
         return response()->json([
             'success' => true,
