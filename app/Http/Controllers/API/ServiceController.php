@@ -46,9 +46,8 @@ class ServiceController extends Controller
         // $client->setClientId($config['id']);
         // $client->setClientSecret($config['secret']);
         // $client->setRedirectUri($config['redirect_uri']);
-        $code = $request->code;
-        $client->setScopes(self::DRIVE_SCOPES);
-        $accessToken = $client->fetchAccessTokenWithAuthCode($code);
+
+        $accessToken = $client->fetchAccessTokenWithAuthCode($request->code);
 
         $service = Service::create([
             'user_id' => auth()->id(),
@@ -71,18 +70,18 @@ class ServiceController extends Controller
         $zipFileName = storage_path('app/public/tasks/' . now()->timestamp . '-task.zip');
         if ($zip->open($zipFileName, ZipArchive::CREATE) === true) {
             $zipFilePath = storage_path('app/public/tasks/' . $fileName);
-            $zip->addFile($zipFilePath);
+            $zip->addFile($zipFilePath, $fileName);
         }
         $zip->close();
 
         // Send to Drive
-        $accessToken = $service->token['access_token'];
-        $client->setAccessToken($accessToken);
+        $accessToken = json_decode($service->token, true);
+        $client->setAccessToken($accessToken['access_token']['access_token']);
         $service = new Drive($client);
         // We'll setup an empty 1MB file to upload.
         // Now lets try and send the metadata as well using multipart!
         $file = new DriveFile;
-        $file->setName("Upload test file from Development");
+        $file->setName("HelloWorld.zip");
         $service->files->create(
             $file,
             array(
@@ -92,6 +91,9 @@ class ServiceController extends Controller
             )
         );
 
-        return response('', Response::HTTP_CREATED);
+        return response()->json([
+            'success' => true,
+            "message" => 'File uploaded successfully'
+        ], Response::HTTP_CREATED);
     }
 }

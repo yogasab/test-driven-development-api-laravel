@@ -47,7 +47,8 @@ class ServiceTest extends TestCase
             $mock->shouldReceive('fetchAccessTokenWithAuthCode')->andReturn('fake-token');
         });
 
-        $service = $this->postJson(route('service.callback', 'dummyCode'))->assertCreated();
+        $service = $this->postJson(route('service.callback', 'dummyCode'))->assertCreated()->json();
+        dd($service);
 
         $this->assertDatabaseHas('services', [
             'user_id' => $this->user->id,

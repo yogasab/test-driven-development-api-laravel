@@ -19,7 +19,6 @@ class AppServiceProvider extends ServiceProvider
             // $client = app(Client::class);
             // For real controller
             $client = new Client();
-
             $config = config('services.google-drive');
             $client->setClientId($config['id']);
             $client->setClientSecret($config['secret']);
