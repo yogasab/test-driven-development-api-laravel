@@ -8,6 +8,7 @@ use Google\Service\Drive;
 use Illuminate\Http\Request;
 use Google\Service\Drive\DriveFile;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\TaskResource;
 use App\Task;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
@@ -64,7 +65,7 @@ class ServiceController extends Controller
         $tasks = Task::where('created_at', '>=', now()->subDays(7))->get();
         // Create json file with the data
         $fileName = '7DaysTasks.json';
-        Storage::put("/public/tasks/$fileName", $tasks->toJson());
+        Storage::put("/public/tasks/$fileName", TaskResource::collection($tasks));
         // Create zip file from data
         $zip = new ZipArchive();
         $zipFileName = storage_path('app/public/tasks/' . now()->timestamp . '-task.zip');

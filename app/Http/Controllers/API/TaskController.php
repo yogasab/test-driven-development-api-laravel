@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\TaskResource;
 use App\Task;
 use App\TodoList;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class TaskController extends Controller
     {
         // $tasks = Task::where('todo_list_id', $todo_list->id)->get();
         $tasks = $todo_list->tasks;
-        return response($tasks);
+        return TaskResource::collection($tasks);
     }
 
     public function store(Request $request, TodoList $todo_list)
@@ -22,7 +23,8 @@ class TaskController extends Controller
         // $request['todo_list_id'] = $todo_list->id;
         // $task = Task::create($request->all());
         $task = $todo_list->tasks()->create($request->all());
-        return $task;
+        return new TaskResource($task);
+        // return $task;
     }
 
     public function destroy(Request $request, Task $task)

@@ -22,11 +22,12 @@ class TaskTest extends TestCase
         $list = $this->createTodoListFactory();
         $task = $this->createTaskFactory(['todo_list_id' => $list->id]);
 
-        $response = $this->getJson(route('todo-list.tasks.index', $list->id))->assertOk()->json();
+        $response = $this->getJson(route('todo-list.tasks.index', $list->id))->assertOk()->json('data');
+        // dd($response);
 
         $this->assertEquals(1, count($response));
         $this->assertEquals($task->title, $response[0]['title']);
-        $this->assertEquals($response[0]['todo_list_id'], $list->id);
+        $this->assertEquals($response[0]['todo_list'], $list->name);
     }
 
     public function test_store_new_task_of_todo_list()
