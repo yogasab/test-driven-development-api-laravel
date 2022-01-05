@@ -43,16 +43,14 @@ class ServiceTest extends TestCase
     public function test_service_callback_will_store_token()
     {
         $this->mock(Client::class, function (MockInterface $mock) {
-            $mock->shouldReceive('setScopes')->once();
-            $mock->shouldReceive('fetchAccessTokenWithAuthCode')->andReturn('fake-token');
+            $mock->shouldReceive('fetchAccessTokenWithAuthCode')->andReturn(['access_token' => 'fake-token']);
         });
 
         $service = $this->postJson(route('service.callback', 'dummyCode'))->assertCreated()->json();
-        dd($service);
 
         $this->assertDatabaseHas('services', [
             'user_id' => $this->user->id,
-            'token' => "\"{\\\"access_token\\\":\\\"fake-token\\\"}\"",
+            'token' => json_encode(['access_token' => 'fake-token']),
             'name' => $service['name']
         ]);
     }

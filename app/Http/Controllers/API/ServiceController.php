@@ -51,7 +51,7 @@ class ServiceController extends Controller
 
         $service = Service::create([
             'user_id' => auth()->id(),
-            'token' => json_encode(['access_token' => $accessToken]),
+            'token' => $accessToken,
             'name' => 'google-drive'
         ]);
 
@@ -75,8 +75,8 @@ class ServiceController extends Controller
         $zip->close();
 
         // Send to Drive
-        $accessToken = json_decode($service->token, true);
-        $client->setAccessToken($accessToken['access_token']['access_token']);
+        $accessToken = $service->token['access_token'];
+        $client->setAccessToken($accessToken);
         $service = new Drive($client);
         // We'll setup an empty 1MB file to upload.
         // Now lets try and send the metadata as well using multipart!
