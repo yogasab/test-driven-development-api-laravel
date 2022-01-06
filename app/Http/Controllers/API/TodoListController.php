@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TodoListController extends Controller
 {
+    // @decs    Create/Store bootcamp
+    // @route   POST /api/v1/bootcamps
+    // @access  Private
     public function index()
     {
         // $lists = TodoList::all();
@@ -20,11 +23,17 @@ class TodoListController extends Controller
         return response(['lists' => $lists]);
     }
 
+    // @decs    Create/Store bootcamp
+    // @route   POST /api/v1/bootcamps
+    // @access  Private
     public function show(TodoList $todo_list)
     {
         return response($todo_list);
     }
 
+    // @decs    Create/Store bootcamp
+    // @route   POST /api/v1/bootcamps
+    // @access  Private
     public function store(TodoListRequest $request)
     {
         // $request['user_id'] = auth()->id();
@@ -33,12 +42,18 @@ class TodoListController extends Controller
         return response($list, Response::HTTP_CREATED);
     }
 
+    // @decs    Create/Store bootcamp
+    // @route   POST /api/v1/bootcamps
+    // @access  Private
     public function destroy(TodoList $todo_list)
     {
         $todo_list->delete();
         return response('', 204);
     }
 
+    // @decs    Create/Store bootcamp
+    // @route   POST /api/v1/bootcamps
+    // @access  Private
     public function update(TodoList $todo_list, TodoListRequest $request)
     {
         $todo_list->update($request->all());

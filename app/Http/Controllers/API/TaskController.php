@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TaskController extends Controller
 {
+    // @decs    Create/Store bootcamp
+    // @route   POST /api/v1/bootcamps
+    // @access  Private
     public function index(TodoList $todo_list)
     {
         // $tasks = Task::where('todo_list_id', $todo_list->id)->get();
@@ -18,6 +21,9 @@ class TaskController extends Controller
         return TaskResource::collection($tasks);
     }
 
+    // @decs    Create/Store bootcamp
+    // @route   POST /api/v1/bootcamps
+    // @access  Private
     public function store(Request $request, TodoList $todo_list)
     {
         // $request['todo_list_id'] = $todo_list->id;
@@ -27,12 +33,18 @@ class TaskController extends Controller
         // return $task;
     }
 
+    // @decs    Create/Store bootcamp
+    // @route   POST /api/v1/bootcamps
+    // @access  Private
     public function destroy(Request $request, Task $task)
     {
         $task->delete();
         return response('', Response::HTTP_NO_CONTENT);
     }
 
+    // @decs    Create/Store bootcamp
+    // @route   POST /api/v1/bootcamps
+    // @access  Private
     public function update(Request $request, Task $task)
     {
         $task->update($request->all());

@@ -23,6 +23,9 @@ class ServiceController extends Controller
         'https://www.googleapis.com/auth/drive.file'
     ];
 
+    // @decs    Create/Store bootcamp
+    // @route   POST /api/v1/bootcamps
+    // @access  Private
     public function connect(Request $request, Client $client)
     {
         if ($request->service === 'google-drive') {
@@ -38,6 +41,9 @@ class ServiceController extends Controller
         }
     }
 
+    // @decs    Create/Store bootcamp
+    // @route   POST /api/v1/bootcamps
+    // @access  Private
     public function callback(Request $request, Client $client)
     {
         // Regular
@@ -61,6 +67,9 @@ class ServiceController extends Controller
         return $service;
     }
 
+    // @decs    Create/Store bootcamp
+    // @route   POST /api/v1/bootcamps
+    // @access  Private
     public function upload(Request $request, Service $service, GoogleDrive $googleDrive)
     {
         // Fetch last 7 days of tasks
