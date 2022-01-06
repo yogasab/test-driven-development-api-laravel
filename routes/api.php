@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->group(function () {
   Route::apiResource('todo-lists', 'API\TodoListController');
   Route::apiResource('labels', 'API\LabelController');
-  Route::apiResource('todo-list.tasks', 'API\TaskController')->shallow();
+  Route::apiResource('todo-list.tasks', 'API\TaskController')->shallow()->except(['show']);
   Route::post('/service/callback', 'API\ServiceController@callback')->name('service.callback');
   Route::post('/service/{service}/upload', 'API\ServiceController@upload')->name('service.upload');
 });

@@ -16,7 +16,7 @@ class TaskStatusTest extends TestCase
         $this->generateToken();
         $task = $this->createTaskFactory();
 
-        $response  = $this->patchJson(route('tasks.update', $task->id), ['status' => Task::STARTED]);
+        $response  = $this->patchJson(route('tasks.update', $task->id), ['status' => Task::STARTED])->json('data');
 
         $this->assertDatabaseHas('tasks', ['status' => Task::STARTED]);
     }

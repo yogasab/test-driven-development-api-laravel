@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Task;
 use App\TodoList;
@@ -11,8 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TaskController extends Controller
 {
-    // @decs    Create/Store bootcamp
-    // @route   POST /api/v1/bootcamps
+    // @decs    Get all tasks
+    // @route   GET /api/todo-list/:todoListId(int)/tasks
     // @access  Private
     public function index(TodoList $todo_list)
     {
@@ -21,33 +22,32 @@ class TaskController extends Controller
         return TaskResource::collection($tasks);
     }
 
-    // @decs    Create/Store bootcamp
-    // @route   POST /api/v1/bootcamps
+    // @decs    Create/Store task
+    // @route   POST /api/todo-list/:todoListId(int)/tasks
     // @access  Private
-    public function store(Request $request, TodoList $todo_list)
+    public function store(TaskRequest $request, TodoList $todo_list)
     {
         // $request['todo_list_id'] = $todo_list->id;
         // $task = Task::create($request->all());
         $task = $todo_list->tasks()->create($request->all());
         return new TaskResource($task);
-        // return $task;
     }
 
-    // @decs    Create/Store bootcamp
-    // @route   POST /api/v1/bootcamps
+    // @decs    Delete Task
+    // @route   DELETE /api/tasks/{taskId(int)} 
     // @access  Private
     public function destroy(Request $request, Task $task)
     {
         $task->delete();
-        return response('', Response::HTTP_NO_CONTENT);
+        return new TaskResource($task);
     }
 
-    // @decs    Create/Store bootcamp
-    // @route   POST /api/v1/bootcamps
+    // @decs    Update Todo Lists
+    // @route   PUT /api/tasks/{taskId(int)} 
     // @access  Private
     public function update(Request $request, Task $task)
     {
         $task->update($request->all());
-        return response($task);
+        return new TaskResource($task);
     }
 }

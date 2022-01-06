@@ -18,7 +18,7 @@ class TaskResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'todo_list' => $this->todo_list->name,
+            // Disable this when run feature test
             'todo_list' => $this->todo_list->name,
             'created_at' => $this->created_at->diffForHumans()
         ];

@@ -23,11 +23,11 @@ class TaskTest extends TestCase
         $task = $this->createTaskFactory(['todo_list_id' => $list->id]);
 
         $response = $this->getJson(route('todo-list.tasks.index', $list->id))->assertOk()->json('data');
-        // dd($response);
+        // dd($response[0]['todo_list']['name']);
 
         $this->assertEquals(1, count($response));
         $this->assertEquals($task->title, $response[0]['title']);
-        $this->assertEquals($response[0]['todo_list'], $list->name);
+        $this->assertEquals($response[0]['todo_list']['name'], $list->name);
     }
 
     public function test_store_new_task_of_todo_list()
@@ -68,7 +68,7 @@ class TaskTest extends TestCase
     public function test_delete_task_of_todo_list()
     {
         $task = $this->createTaskFactory();
-        $this->deleteJson(route('tasks.destroy', $task->id))->assertNoContent();
+        $this->deleteJson(route('tasks.destroy', $task->id))->assertOk();
         $this->assertDatabaseMissing('tasks', ['title' => $task->title]);
     }
 
