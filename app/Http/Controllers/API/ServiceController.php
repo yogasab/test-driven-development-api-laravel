@@ -23,9 +23,9 @@ class ServiceController extends Controller
         'https://www.googleapis.com/auth/drive.file'
     ];
 
-    // @decs    Create/Store bootcamp
-    // @route   POST /api/v1/bootcamps
-    // @access  Private
+    // @decs    Connect Google Auth  
+    // @route   POST /api/service/connect/google-drive
+    // @access  Public
     public function connect(Request $request, Client $client)
     {
         if ($request->service === 'google-drive') {
@@ -41,8 +41,8 @@ class ServiceController extends Controller
         }
     }
 
-    // @decs    Create/Store bootcamp
-    // @route   POST /api/v1/bootcamps
+    // @decs    Create/Store code to Google Auth
+    // @route   POST /api/service/callback
     // @access  Private
     public function callback(Request $request, Client $client)
     {
@@ -67,8 +67,8 @@ class ServiceController extends Controller
         return $service;
     }
 
-    // @decs    Create/Store bootcamp
-    // @route   POST /api/v1/bootcamps
+    // @decs    Create/Store file to Google Drive
+    // @route   POST /api/service/{serviceId}/upload
     // @access  Private
     public function upload(Request $request, Service $service, GoogleDrive $googleDrive)
     {

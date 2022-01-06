@@ -23,7 +23,7 @@ class TaskTest extends TestCase
         $task = $this->createTaskFactory(['todo_list_id' => $list->id]);
 
         $response = $this->getJson(route('todo-list.tasks.index', $list->id))->assertOk()->json('data');
-        // dd($response[0]['todo_list']['name']);
+        // dd($response[0]['todo_list']);
 
         $this->assertEquals(1, count($response));
         $this->assertEquals($task->title, $response[0]['title']);
