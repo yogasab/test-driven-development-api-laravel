@@ -3,12 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TodoList extends Model
 {
-    protected $fillable = ['name', 'user_id'];
-    // protected $guarded = [];
+    protected $guarded = ['id'];
+    // protected $fillable = ['name', 'user_id', 'description'];
 
     public static function boot()
     {
@@ -21,5 +22,10 @@ class TodoList extends Model
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

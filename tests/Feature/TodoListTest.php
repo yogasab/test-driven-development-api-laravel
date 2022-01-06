@@ -27,22 +27,23 @@ class TodoListTest extends TestCase
     {
         // Preparation
         factory(TodoList::class)->create();
+
         // Action / perform
         $this->createTodoListFactory();
-        $response = $this->getJson(route('todo-lists.index'));
+        $response = $this->getJson(route('todo-lists.index'))->json('data');
 
         // Assertion / predict
-        $this->assertEquals(1, count($response->json()));
-        $this->assertEquals('Coding Backend in Laravel', $response->json()['lists'][0]['name']);
+        $this->assertEquals(1, count($response));
+        $this->assertEquals('Coding Backend in Laravel', $response[0]['title']);
     }
 
     public function test_get_single_todo_list_show()
     {
         // Check if is it fetch it or failed
-        $response = $this->getJson(route('todo-lists.show', $this->list->id))->assertOk()->json();
+        $response = $this->getJson(route('todo-lists.show', $this->list->id))->assertOk()->json('data');
 
         // Check the current name
-        $this->assertEquals($response['name'], $this->list->name);
+        $this->assertEquals($response['title'], $this->list->name);
     }
 
     public function test_store_new_todo_list()
@@ -55,8 +56,9 @@ class TodoListTest extends TestCase
             // 'user_id' => $user->id
         ]))
             ->assertCreated()
-            ->json();
-        $this->assertEquals($list->name, $response['name']);
+            ->json('data');
+
+        $this->assertEquals($list->name, $response['title']);
         $this->assertDatabaseHas('todo_lists', ['name' => $list->name]);
     }
 
@@ -71,7 +73,8 @@ class TodoListTest extends TestCase
 
     public function test_delete_todo_list_destroy()
     {
-        $this->deleteJson(route('todo-lists.destroy', $this->list->id))->assertNoContent();
+        $this->deleteJson(route('todo-lists.destroy', $this->list->id))->assertOk();
+        
         $this->assertDatabaseMissing('todo_lists', ['name' => $this->list->name]);
     }
 
